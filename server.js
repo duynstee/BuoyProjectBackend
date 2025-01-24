@@ -10,12 +10,13 @@ const SECRET_KEY = 'your_secret_key';
 app.use(bodyParser.json());
 
 const corsOptions = {
-  origin:
-    "https://buoyproject-awb6hvh3c8c3dmdw.westeurope-01.azurewebsites.net", // Replace with your frontend's Azure URL
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: "https://buoyproject-awb6hvh3c8c3dmdw.westeurope-01.azurewebsites.net", // Frontend URL
+  methods: ["GET", "POST"], // Allowed HTTP methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 };
 app.use(cors(corsOptions));
+
+app.options("*", cors(corsOptions));
 
 const users = [
   { username: 'admin', password: 'groep3' },

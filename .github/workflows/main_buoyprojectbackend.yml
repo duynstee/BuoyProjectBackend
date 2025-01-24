@@ -60,7 +60,7 @@ jobs:
         with:
           app-name: 'BuoyProjectBackend'
           slot-name: 'Production'
-          package: server.js
+          package: .
           
 
 

@@ -25,10 +25,7 @@ jobs:
         run: |
           npm install
 
-      - name: Zip the application files
-        run: |
-          zip -r app.zip server.js package.json package-lock.json
-          
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -63,7 +60,7 @@ jobs:
         with:
           app-name: 'BuoyProjectBackend'
           slot-name: 'Production'
-          package: app.zip
+          package: server.js
           
 
 

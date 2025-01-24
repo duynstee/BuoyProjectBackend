@@ -1,4 +1,3 @@
-// filepath: /backend/server.js
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
@@ -15,8 +14,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 };
 app.use(cors(corsOptions));
-
-app.options("*", cors(corsOptions));
+app.options("*", cors(corsOptions)); // Handle preflight requests
 
 const users = [
   { username: 'admin', password: 'groep3' },
@@ -24,19 +22,23 @@ const users = [
 ];
 
 function verifyToken(req, res, next) {
-    const token = req.headers['authorization'];
-    if (!token) {
-      return res.status(403).json({ message: 'No token provided' });
+  if (req.method === 'OPTIONS') {
+    return next(); // Skip token verification for preflight requests
+  }
+
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(403).json({ message: 'No token provided' });
+  }
+
+  jwt.verify(token.split(' ')[1], SECRET_KEY, (err, decoded) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to authenticate token' });
     }
-  
-    jwt.verify(token.split('')[1], SECRET_KEY, (err, decoded) => {
-      if (err) {
-        return res.status(500).json({ message: 'Failed to authenticate token' });
-      }
-      req.userId = decoded.id;
-      next();
-    });
-  }  
+    req.userId = decoded.id;
+    next();
+  });
+}
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -52,26 +54,22 @@ app.post('/login', (req, res) => {
 
 app.post('/addUser', verifyToken, (req, res) => {
   const { username, password } = req.body;
-  console.log('Received request to add user:', username,);
 
   if (users.find(u => u.username === username)) {
-    console.log('User already exists', username);	
     return res.status(400).json({ message: 'User already exists' });
   }
 
   try {
     users.push({ username, password });
-    console.log('User added successfully:', username);
     res.status(201).json({ message: 'User added successfully' });
   } catch (error) {
-    console.error('Error adding user:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
 app.get('/protected', verifyToken, (req, res) => {
-    res.json({ message: 'This is a protected route' });
-  });
+  res.json({ message: 'This is a protected route' });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 const corsOptions = {
   origin:
-    "https://buoyproject-awb6hvh3c8c3dmdw.westeurope-01.azurewebsites.net/", // Replace with your frontend's Azure URL
+    "https://buoyproject-awb6hvh3c8c3dmdw.westeurope-01.azurewebsites.net", // Replace with your frontend's Azure URL
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };

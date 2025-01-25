@@ -17,7 +17,7 @@ app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // Handle preflight requests
 
 const users = [
-  { username: 'admin', password: 'groep3' },
+  { username: 'admin', password: 'asdf' },
   // Add more users as needed
 ];
 
